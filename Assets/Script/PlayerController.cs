@@ -8,19 +8,22 @@ public class PlayerController : MonoBehaviour
     public float speed = 8f;
     
     public GameObject bulletPrefab;
-    public float spawnRateMin = 0.5f;
-    public float spawnRateMax = 1.0f;
-
-    private float spawnRate = default;
-    private float timeAfterSpawn = default;
+    
     private GameObject[] bulletsPool;
     private int currIndex = 0;
- 
+    
+    public bool isHitable = false;
+    
+    public int playerHeart;
+    public int playerMaxHeart = 3;
 
     public Transform startTransf;
 
     void Start()
     {
+        playerHeart = playerMaxHeart;
+        isHitable = true;
+        
         playerRidgidbody = GetComponent<Rigidbody>();
         // --> It is not necessary to set the rigibody of the gameObj directly in the editor.
         
@@ -46,8 +49,6 @@ public class PlayerController : MonoBehaviour
         Vector3 playerVelocity = new Vector3(xSpeed, 0f, zSpeed);
         playerRidgidbody.velocity = playerVelocity;
 
-      
-         
 
          if(Input.GetKeyDown(KeyCode.Return)){
           
@@ -63,12 +64,27 @@ public class PlayerController : MonoBehaviour
                 currIndex = 0;
             }
          }
+
     }
+
+    public  void SetHitable(bool value) {
+        isHitable = value;
+    } 
+    public bool GetHitable() {
+        return isHitable;
+    } 
 
 
     public void Die(){
-        gameObject.SetActive(false);
-       // GameManager gameManager = FindObjectOfType<GameManager>();
-       // gameManager.EndGame();
+       gameObject.SetActive(false);
+       playerHeart--;
+       SetHitable(false);
+       
+
+        if(playerHeart == 0 ){
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        gameManager.EndGame();
+        }
+       
     }
 }

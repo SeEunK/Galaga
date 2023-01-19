@@ -11,7 +11,8 @@ public class Enemy : MonoBehaviour
     public Transform targetTranf;
     private float spawnRate = default;
     private float timeAfterSpawn = default;
-
+    
+    public bool isKillEnemy= false;
     
     private GameObject[] bulletsPool;
     private int currIndex = 0;
@@ -63,6 +64,8 @@ public class Enemy : MonoBehaviour
     
     public void Die(){
         gameObject.SetActive(false);
-       
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        gameManager.SetScore(10);
     }
+
 }
