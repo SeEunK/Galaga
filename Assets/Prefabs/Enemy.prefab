@@ -9764,6 +9764,7 @@ MonoBehaviour:
   spawnRateMax: 1
   enemySpeed: 5
   targetTranf: {fileID: 5714791015460211067, guid: d0f60881c82638a4cb872fffab66ffec, type: 3}
+  killpoint: 10
   isKillEnemy: 0
   enemyRigid: {fileID: 8240128952324373400}
   MoveTargetTranf: {fileID: 0}

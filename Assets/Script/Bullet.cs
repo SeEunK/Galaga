@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float bullectSpeed = 8f;
+    public float bullectSpeed = 5f;
     public Rigidbody bulletRigid;
     private Vector3 direction;
+    public Enemy shooter;
 
     public void Shoot(Vector3 direction)
     {
@@ -30,20 +31,28 @@ public class Bullet : MonoBehaviour
     void Update()
     {
         transform.Translate(direction);
-        if (gameObject.transform.position.z <= -20)
+        Vector3 enemyPos = shooter.gameObject.transform.position;
+        Vector3 bulletPos = this.gameObject.transform.position;
+        Vector3 distance = bulletPos- enemyPos; 
+
+        if (distance.magnitude >= 30)
         {
-            gameObject.SetActive(false);
+            shooter.PushBullet(this);
         }
     }
-
     public void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
+            
             PlayerController playerController = other.GetComponent<PlayerController>();
             if (playerController != null)
             {
-                playerController.Die();
+                if (playerController.playerState == PlayerController.PlayerState.Live)
+                {
+                    playerController.Die();
+                    shooter.PushBullet(this);
+                }
             }
             else
             {

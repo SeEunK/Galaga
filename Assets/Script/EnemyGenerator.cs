@@ -4,38 +4,48 @@ using UnityEngine;
 
 public class EnemyGenerator : MonoBehaviour
 {
-    public GameObject enemyPrefab;
+    public List<GameObject> enemyPrefabs;
+
+
     public float spawnRateMin = 4.5f;
     public float spawnRateMax = 5.0f;
 
-    public Transform targetTranf;
+    public List<Transform> targetTranfs;
     private float spawnRate = default;
     private float timeAfterSpawn = default;
    
     private GameObject[] enemyPool;
     private int currIndex = 0;
-    
 
-    public Transform startTransf;
-   
+    public GameObject player;
+
+    public List<Transform> startTransfs;
+    public int dieCount;
+    public int maxCountEnemyType01 = 5;
+
+    public int maxCountEnemyType02 = 3;
 
     // Start is called before the first frame update
     void Start()
     {
-        startTransf = gameObject.transform;
+       
         timeAfterSpawn = 0f;
         spawnRate = Random.Range(spawnRateMin, spawnRateMax);
         
         // --> secene object all search 
 
-        enemyPool = new GameObject[5];
+        int maxenemyCount = maxCountEnemyType01 + maxCountEnemyType02;
+        enemyPool = new GameObject[maxenemyCount];
 
-        for(int i = 0; i< 5; i++)
+        for (int i = 0; i< maxCountEnemyType01; i++)
         {
-            GameObject enemyObject = Instantiate(enemyPrefab);
+            GameObject enemyObject = Instantiate(enemyPrefabs[0]);
+           
             enemyPool[i] = enemyObject;
-            enemyPool[i].GetComponent<Enemy>().MoveTargetTranf = targetTranf;
+            enemyPool[i].GetComponent<Enemy>().MoveTargetTranf = targetTranfs[i];
+            enemyPool[i].GetComponent<Enemy>().targetTranf = player.transform;
             enemyObject.SetActive(false);
+
         }
         
     } 
@@ -43,21 +53,24 @@ public class EnemyGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currIndex >= 5)
+        {
+            return;
+        }
+
         timeAfterSpawn +=Time.deltaTime;
         if(timeAfterSpawn >= spawnRate)
         {
-            enemyPool[currIndex].transform.LookAt(targetTranf);
+            
             timeAfterSpawn = 0f;
-            enemyPool[currIndex].transform.position = startTransf.position;
-            enemyPool[currIndex].SetActive(false);
+            enemyPool[currIndex].transform.position = startTransfs[0].position;
+            
             enemyPool[currIndex].SetActive(true);
-            enemyPool[currIndex].transform.LookAt(targetTranf);
+            
             
             spawnRate = Random.Range(spawnRateMin, spawnRateMax);
             currIndex++;
-            if(currIndex>=5){
-                currIndex = 0;
-            }
+        
         }
     }
     

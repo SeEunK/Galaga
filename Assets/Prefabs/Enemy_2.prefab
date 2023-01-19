@@ -24656,6 +24656,7 @@ GameObject:
   - component: {fileID: 5427306022120349173}
   - component: {fileID: 329323093279625749}
   - component: {fileID: 2364191111308257717}
+  - component: {fileID: 1618577928}
   m_Layer: 0
   m_Name: Enemy_2
   m_TagString: Enemy
@@ -24710,6 +24711,28 @@ CapsuleCollider:
   m_Height: 3
   m_Direction: 2
   m_Center: {x: 0, y: -0.08, z: -0.21}
+--- !u!114 &1618577928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5427306022120349172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30781242cfd50c149b22b4d8de9b5eed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 1000013858407736, guid: a29f086d60ac66547b74eacc738e8445, type: 3}
+  spawnRateMin: 1.5
+  spawnRateMax: 5
+  enemySpeed: 5
+  targetTranf: {fileID: 0}
+  killpoint: 20
+  isKillEnemy: 0
+  enemyRigid: {fileID: 329323093279625749}
+  MoveTargetTranf: {fileID: 0}
+  startTransf: {fileID: 0}
 --- !u!1 &5427306022327983586
 GameObject:
   m_ObjectHideFlags: 0

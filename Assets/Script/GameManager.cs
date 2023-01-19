@@ -6,11 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 { 
+
     public GameObject gameOverText;
     public Text recordText;
     public Text scoreText;
     public GameObject player;
-    
+
+    public List<Image> hearts;
     public static int playerMaxHeart =3;
     private int score;
     private bool isGameOver;
@@ -19,6 +21,8 @@ public class GameManager : MonoBehaviour
     public float spawnRateMax = 3.0f;
 
     public float spawnRate = default;
+
+    
     
     void Start()
     {
@@ -54,17 +58,46 @@ public class GameManager : MonoBehaviour
         
         }
         
-       // PlayerController playerController = FindObjectOfType<PlayerController>();
-        if(PlayerIsHitable() == false){
-            spawnRate +=Time.deltaTime;
-            if(spawnRate >=spawnRateMax ){
-                player.SetActive(true);
-                PlayerSetHitable();
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        if(playerController.playerState == PlayerController.PlayerState.Respawn)
+        {
+            spawnRate += Time.deltaTime;
+            int twinkle = (int) (spawnRate / 0.2f);
+            if(twinkle%2 == 0)
+            {
+                playerController.gameObject.SetActive(false);
+
+            }
+            else
+            {
+                playerController.gameObject.SetActive(true);
+            }
+
+            if(spawnRate >= spawnRateMax)
+            {
                 spawnRate = 0;
+
+                playerController.Respawn();
             }
         }
+        
        
        
+    }
+
+    public void SetHeartCount(int heartCount)
+    {
+        for (int i = 0; i < playerMaxHeart; i++)
+        {
+            if (i < heartCount)
+            {
+                hearts[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                hearts[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     public void EndGame(){
@@ -84,32 +117,5 @@ public class GameManager : MonoBehaviour
         score = score+ addScore;
     }
 
-    public bool PlayerIsHitable()
-    {
-        
-        PlayerController playerController = player.GetComponent<PlayerController>();
-        if (playerController != null)
-        {
-            return playerController.GetHitable();
-        }
-        else
-        {
-           return false;
-        }
-       
-    }
-    public void PlayerSetHitable()
-    {
-        
-            PlayerController playerController = player.GetComponent<PlayerController>();
-            if (playerController != null)
-            {
-                playerController.SetHitable(true);
-            }
-            else
-            {
-               
-            }
-        
-    }
+  
 }

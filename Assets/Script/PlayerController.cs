@@ -1,9 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PlayerController;
 
 public class PlayerController : MonoBehaviour
 {
+    public enum PlayerState
+    {
+        Die, Live, Respawn
+    } // live -> die -> respawn
+
+    public PlayerState playerState;
     public Rigidbody playerRidgidbody;
     public float speed = 8f;
     
@@ -12,8 +19,6 @@ public class PlayerController : MonoBehaviour
     private GameObject[] bulletsPool;
     private int currIndex = 0;
     
-    public bool isHitable = false;
-    
     public int playerHeart;
     public int playerMaxHeart = 3;
 
@@ -21,8 +26,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        playerState = PlayerState.Live;
         playerHeart = playerMaxHeart;
-        isHitable = true;
+      
         
         playerRidgidbody = GetComponent<Rigidbody>();
         // --> It is not necessary to set the rigibody of the gameObj directly in the editor.
@@ -52,12 +58,10 @@ public class PlayerController : MonoBehaviour
 
          if(Input.GetKeyDown(KeyCode.Return)){
           
-            bulletsPool[currIndex].transform.LookAt(transform.forward);
             
             bulletsPool[currIndex].transform.position = startTransf.position;
-            bulletsPool[currIndex].SetActive(false);
+
             bulletsPool[currIndex].SetActive(true);
-            bulletsPool[currIndex].transform.LookAt(transform.forward);
            
             currIndex++;
             if(currIndex>=10){
@@ -67,24 +71,33 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public  void SetHitable(bool value) {
-        isHitable = value;
-    } 
-    public bool GetHitable() {
-        return isHitable;
-    } 
 
 
-    public void Die(){
-       gameObject.SetActive(false);
-       playerHeart--;
-       SetHitable(false);
-       
 
-        if(playerHeart == 0 ){
+    public void Die()
+    {
+
         GameManager gameManager = FindObjectOfType<GameManager>();
-        gameManager.EndGame();
+        playerState = PlayerState.Die;
+        gameObject.SetActive(false);
+        --playerHeart;
+        gameManager.SetHeartCount(playerHeart);
+
+
+        if (playerHeart <= 0)
+        {
+            gameManager.EndGame();
         }
-       
+        else
+        {
+            playerState = PlayerState.Respawn;
+        }
+
+    }
+
+    public void Respawn()
+    {
+        playerState = PlayerState.Live;
+        gameObject.SetActive(true);
     }
 }
