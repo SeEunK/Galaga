@@ -5,9 +5,9 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public GameObject bulletPrefab;
-    public float spawnRateMin = 0.5f;
-    public float spawnRateMax = 1.0f;
-    public float enemySpeed = 1.0f;
+    public float spawnRateMin = 1.5f;
+    public float spawnRateMax = 5.0f;
+    public float enemySpeed = 5.0f;
 
     public Transform targetTranf;
     private float spawnRate = default;
@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour
         if(MoveTargetTranf.position != gameObject.transform.position)
         {
             gameObject.transform.LookAt(targetTranf);
-            enemyRigid.MovePosition(gameObject.transform.position * enemySpeed * Time.deltaTime);
+            transform.position= Vector3.MoveTowards(transform.position,MoveTargetTranf.position,enemySpeed*Time.deltaTime );
         }
         else{
            

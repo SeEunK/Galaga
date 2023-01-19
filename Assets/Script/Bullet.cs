@@ -17,7 +17,7 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //bulletRigid = GetComponent<Rigidbody>();
+        bulletRigid = GetComponent<Rigidbody>();
         bulletRigid.velocity = transform.forward * bullectSpeed;
         // Destroy(gameObject, 3.0f);
     }

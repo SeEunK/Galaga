@@ -9762,7 +9762,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 9140545054723856490, guid: 7af6b07676c52b94ba63b3fa7ff7d0fd, type: 3}
   spawnRateMin: 0.5
   spawnRateMax: 1
-  enemySpeed: 1
+  enemySpeed: 5
   targetTranf: {fileID: 5714791015460211067, guid: d0f60881c82638a4cb872fffab66ffec, type: 3}
   isKillEnemy: 0
   enemyRigid: {fileID: 8240128952324373400}

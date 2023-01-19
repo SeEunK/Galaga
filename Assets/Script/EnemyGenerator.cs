@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemyGenerator : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public float spawnRateMin = 0.5f;
-    public float spawnRateMax = 1.0f;
+    public float spawnRateMin = 4.5f;
+    public float spawnRateMax = 5.0f;
 
     public Transform targetTranf;
     private float spawnRate = default;
@@ -28,9 +28,9 @@ public class EnemyGenerator : MonoBehaviour
         
         // --> secene object all search 
 
-        enemyPool = new GameObject[10];
+        enemyPool = new GameObject[5];
 
-        for(int i = 0; i< 10; i++)
+        for(int i = 0; i< 5; i++)
         {
             GameObject enemyObject = Instantiate(enemyPrefab);
             enemyPool[i] = enemyObject;
@@ -55,7 +55,7 @@ public class EnemyGenerator : MonoBehaviour
             
             spawnRate = Random.Range(spawnRateMin, spawnRateMax);
             currIndex++;
-            if(currIndex>=10){
+            if(currIndex>=5){
                 currIndex = 0;
             }
         }
