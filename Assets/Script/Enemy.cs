@@ -7,16 +7,19 @@ public class Enemy : MonoBehaviour
     public GameObject bulletPrefab;
     public float spawnRateMin = 0.5f;
     public float spawnRateMax = 1.0f;
+    public float enemySpeed = 1.0f;
 
     public Transform targetTranf;
     private float spawnRate = default;
     private float timeAfterSpawn = default;
     
     public bool isKillEnemy= false;
-    
+     public Rigidbody enemyRigid;
     private GameObject[] bulletsPool;
     private int currIndex = 0;
-    private Vector3 poolPosition= new Vector3(0, 0, -100);
+    //private Vector3 poolPosition= new Vector3(0, 0, -100);
+    
+    public Transform MoveTargetTranf;
 
     public Transform startTransf;
    
@@ -26,6 +29,8 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        startTransf = GetComponent<Transform>();
+        enemyRigid = GetComponent<Rigidbody>();
         timeAfterSpawn = 0f;
         spawnRate = Random.Range(spawnRateMin, spawnRateMax);
         //targetTranf = FindObjectOfType<PlayerController>().transform;
@@ -39,6 +44,7 @@ public class Enemy : MonoBehaviour
             bulletsPool[i] = gameObject;
             gameObject.SetActive(false);
         }
+        //
         
     } 
 
@@ -59,6 +65,15 @@ public class Enemy : MonoBehaviour
             if(currIndex>=10){
                 currIndex = 0;
             }
+        }
+
+        if(MoveTargetTranf.position != gameObject.transform.position)
+        {
+            gameObject.transform.LookAt(targetTranf);
+            enemyRigid.MovePosition(gameObject.transform.position * enemySpeed * Time.deltaTime);
+        }
+        else{
+           
         }
     }
     
