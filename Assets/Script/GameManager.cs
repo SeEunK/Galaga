@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using static PlayerController;
+using static GameManager;
 
 public class GameManager : MonoBehaviour
-{ 
+{
+    public enum GameState
+    {
+        GamePlay, GameOver 
+    } // 
 
+    public GameState gameState;
     public GameObject gameOverText;
     public Text recordText;
     public Text scoreText;
@@ -26,10 +33,11 @@ public class GameManager : MonoBehaviour
     
     void Start()
     {
+        gameState = GameState.GamePlay;
         spawnRate = 0;
         score = 0;
         isGameOver = false;
-        GameObject uiObjs_ = GFunc.GetRootObj("Canvas");
+       
         player = GameObject.Find("Player");
 
         recordText.text = "recordText";
@@ -44,13 +52,14 @@ public class GameManager : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.R)){
                 
                 SceneManager.LoadScene(SCENE_NAME);
-               
+                gameState = GameState.GamePlay;
+
             }
         }
         if(Input.GetKeyDown(KeyCode.Q))
         {
             
-           GFunc.QuitThisGame();
+           QuitThisGame();
         }
         else
         {
@@ -101,6 +110,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void EndGame(){
+        gameState = GameState.GameOver;
         isGameOver = true;
         gameOverText.SetActive(true);
         int bestScore = PlayerPrefs.GetInt("BestScore");
@@ -116,6 +126,14 @@ public class GameManager : MonoBehaviour
     public void SetScore(int addScore){
         score = score+ addScore;
     }
+    public void QuitThisGame()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
 
-  
+    }
+
 }

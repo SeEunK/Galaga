@@ -6,19 +6,23 @@ public class PlayerBullet : MonoBehaviour
 {
     public float bullectSpeed = 8f;
     public Rigidbody bulletRigid;
+    public PlayerController playerController;
 
-    // Start is called before the first frame update
     void Start()
     {
         bulletRigid.velocity = transform.forward * bullectSpeed;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        if (gameObject.transform.position.z >= 20)
+        Vector3 playerPos = playerController.gameObject.transform.position;
+        Vector3 bulletPos = this.gameObject.transform.position;
+        Vector3 distance = bulletPos - playerPos;
+
+        if (distance.magnitude >= 30)
         {
-            gameObject.SetActive(false);
+            playerController.PushBullet(this);
         }
     }
 
@@ -30,6 +34,7 @@ public class PlayerBullet : MonoBehaviour
             if (enemy != null)
             {
                 enemy.Die();
+                playerController.PushBullet(this);
             }
             else
             {

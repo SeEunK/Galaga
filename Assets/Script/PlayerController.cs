@@ -15,9 +15,7 @@ public class PlayerController : MonoBehaviour
     public float speed = 8f;
     
     public GameObject bulletPrefab;
-    
-    private GameObject[] bulletsPool;
-    private int currIndex = 0;
+    private List<GameObject> bulletsPool = new List<GameObject>();
     
     public int playerHeart;
     public int playerMaxHeart = 3;
@@ -28,19 +26,9 @@ public class PlayerController : MonoBehaviour
     {
         playerState = PlayerState.Live;
         playerHeart = playerMaxHeart;
-      
         
         playerRidgidbody = GetComponent<Rigidbody>();
-        // --> It is not necessary to set the rigibody of the gameObj directly in the editor.
-        
-        bulletsPool = new GameObject[10];
-
-        for(int i = 0; i< 10; i++)
-        {
-            GameObject gameObject = Instantiate(bulletPrefab);
-            bulletsPool[i] = gameObject;
-            gameObject.SetActive(false);
-        }
+                
     }
 
     void Update()
@@ -56,22 +44,49 @@ public class PlayerController : MonoBehaviour
         playerRidgidbody.velocity = playerVelocity;
 
 
-         if(Input.GetKeyDown(KeyCode.Return)){
-          
-            
-            bulletsPool[currIndex].transform.position = startTransf.position;
+         if(Input.GetKeyDown(KeyCode.Space)){
 
-            bulletsPool[currIndex].SetActive(true);
+            GameObject playerBullet = PopBullet();
+            playerBullet.transform.position = startTransf.position;
+
            
-            currIndex++;
-            if(currIndex>=10){
-                currIndex = 0;
-            }
          }
 
     }
 
+    public void PushBullet(PlayerBullet playerbullet)
+    {
+        playerbullet.gameObject.SetActive(false);
 
+        bulletsPool.Add(playerbullet.gameObject);
+    }
+    public GameObject PopBullet()
+    {
+        if (bulletsPool.Count > 0)
+        {
+            GameObject temp = bulletsPool[0];
+            bulletsPool.RemoveAt(0);
+            temp.SetActive(true);
+            return temp;
+        }
+        else
+        {
+            GameObject newBullet = CreateBullet();
+            newBullet.SetActive(true);
+            return newBullet;
+        }
+
+    }
+    public GameObject CreateBullet()
+    {
+        GameObject gameObject = Instantiate(bulletPrefab);
+        bulletsPool.Add(gameObject);
+        gameObject.SetActive(false);
+        PlayerBullet playerbullet = gameObject.GetComponent<PlayerBullet>();
+        playerbullet.playerController = this;
+
+        return gameObject;
+    }
 
 
     public void Die()
